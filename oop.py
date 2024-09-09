@@ -24,7 +24,7 @@ class Car:
 
 car1 = Car("Toyota", 2020)
 
-print(car1.horsepower, car1.licenseplate, car1.make, car1.year,)
+print("HP:", car1.horsepower, "\nLicenseplate:", car1.licenseplate, "\nMake:", car1.make,"\nYear:", car1.year,)
 
 
     
