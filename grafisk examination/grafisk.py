@@ -21,10 +21,10 @@ class Particle:
 
 class ParticleSystem:
     def __init__(self):
-        self.particles = []
+        self.particles = [] # En lista som håller partiklarna
 
     def add_particles(self, position):
-        for _ in range(20):
+        for i in range(20):
             velocity = [random.uniform(-5, 5), random.uniform(-5, 5)]
             self.particles.append(Particle(position, velocity, 10))
 
