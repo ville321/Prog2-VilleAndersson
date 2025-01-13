@@ -2,6 +2,8 @@ import pygame
 import random
 
 pygame.init()
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
 
 class Particle:
     def __init__(self, position, velocity, ttl):
@@ -57,11 +59,10 @@ class Circle:
         distance = ((self.position[0] - mouse_pos[0]) ** 2 + (self.position[1] - mouse_pos[1]) ** 2) ** 0.5
         return distance < self.radius
 
-width, height = 800, 600
-screen = pygame.display.set_mode((width, height))
-
 particle_system = ParticleSystem()
-circles = [Circle((random.randint(50, 750), random.randint(50, 550))) for _ in range(5)]
+circles = []
+for i in range(5):
+    circles.append(Circle((random.randint(50, 750), random.randint(50, 550))))
 
 clock = pygame.time.Clock()
 score = 0
@@ -97,7 +98,7 @@ while running:
 
     # Texter på skärmen
     font = pygame.font.Font(None, 36)
-    text = font.render(f"Score: {score}", True, (0, 0, 0))
+    text = font.render(f"Poäng: {score}", True, (0, 0, 0))
     screen.blit(text, (10, 10))
     timer_text = font.render(f"Tid: {time_duration}", True, (0, 0, 0))
     screen.blit(timer_text, (width - 150, 10))
