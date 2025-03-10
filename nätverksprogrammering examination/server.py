@@ -1,35 +1,45 @@
-# Server med separat tråd för varje klient
 from socket import *
-def start_server():         # Samma som i förra exemplet
+import threading
+
+def start_server():
     s = socket()
     host = input("Ange serverns IP-adress, t.ex. localhost eller 10.32.42.137: ")
-    port = 12345    # Godtycklig port, ändra vid behov men se till att det är konsekvent med den port som klienten ansluter till
+    port = 12345
     s.bind((host, port))
     s.listen()
+    print("Servern startad, väntar på klienter...")
     return s
-def threaded_client(connection):    # Definierar vad tråden ska göra
-    msg = "Servern säger hej till klienten!"
-    connection.send(msg.encode("utf-16"))
+
+clients = []
+
+def broadcast(data, connection):
+    for client in clients:
+        if client != connection:
+            try:
+                client.send(data)
+            except:
+                clients.remove(client)
+
+def threaded_client(connection):
+    clients.append(connection)
     while True:
         try:
             data = connection.recv(1024)
-            msg = "Servern tog emot följande meddelande: " \
-                + data.decode("utf-16")
-            print(msg)
-            connection.send(msg.encode("utf-16"))
+            if not data:
+                break
+            broadcast(data, connection)
         except:
-            print("Anslutning till en klient avbruten.")
-            return
+            break
 
-# Huvudprocess
-from _thread import *
-s = start_server()
-ThreadCount = 0
-while True: # Skapar en ny tråd för varje klient som ansluter
-    print("Väntar på att en klient ska ansluta till servern...")
-    conn, address = s.accept()
-    print("En ny klient anslöt: " + address[0] + ':'
-          + str(address[1]))
-    start_new_thread(threaded_client, (conn, ))
-    ThreadCount += 1
-    print("Tråd nummer: " + str(ThreadCount))
+    clients.remove(connection)
+    connection.close()
+
+def main():
+    server_socket = start_server()
+    while True:
+        conn, address = server_socket.accept()
+        print(f"En ny klient anslöt: {address[0]}:{address[1]}")
+        threading.Thread(target=threaded_client, args=(conn,)).start()
+
+if __name__ == "__main__":
+    main()
