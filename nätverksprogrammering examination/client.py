@@ -9,7 +9,7 @@ def connect_to_server():
     s.connect((host, port))
     return s
 
-def receive_drawing_data():
+def receive_drawing_data(conn):
     while True:
         data = conn.recv(1024)
         if data:
@@ -19,8 +19,10 @@ def receive_drawing_data():
 def draw(event):
     x, y = event.x, event.y
     if hasattr(draw, 'last_x'):
-        canv.create_line(draw.last_x, draw.last_y, x, y, fill="black", width=2)
-        conn.send(f"{draw.last_x},{draw.last_y},{x},{y}".encode("utf-8"))
+        if 0 <= x <= canv.winfo_width() and 0 <= y <= canv.winfo_height():
+            canv.create_line(draw.last_x, draw.last_y, x, y, fill="black", width=2)
+            data = f"{draw.last_x},{draw.last_y},{x},{y}"
+            conn.send(data.encode("utf-8"))
     draw.last_x, draw.last_y = x, y
 
 def reset_last_position(event):
@@ -37,6 +39,6 @@ canv.pack()
 canv.bind("<B1-Motion>", draw)
 canv.bind("<ButtonRelease-1>", reset_last_position)
 
-threading.Thread(target=receive_drawing_data, daemon=True).start()
+threading.Thread(target=receive_drawing_data, args=(conn,), daemon=True).start()
 
 root.mainloop()
