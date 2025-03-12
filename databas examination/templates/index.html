@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Chatt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div id="chatbox" style="border:1px solid #000; height:300px; overflow-y:scroll;"></div>
+    <input type="text" id="message" placeholder="Skriv ett meddelande">
+    <button onclick="sendMessage()">Skicka</button>
+
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('message', function(data) {
+            var chatbox = document.getElementById('chatbox');
+            chatbox.innerHTML += '<p><strong>' + data.user + ':</strong> ' + data.msg + '</p>';
+            chatbox.scrollTop = chatbox.scrollHeight;
+        });
+
+        function sendMessage() {
+            var messageInput = document.getElementById('message');
+            var msg = messageInput.value;
+            socket.send(msg);
+            messageInput.value = '';
+        }
+    </script>
+</body>
+</html>
