@@ -1,0 +1,48 @@
+.sign-container {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 300px;
+    text-align: center;
+    filter: blur(0);
+    opacity: 100%;
+}
+
+.sign-container h2 {
+    margin-bottom: 20px;
+    color: #e0e0e0;
+}
+
+.sign-container label {
+    display: block;
+    margin-bottom: 5px;
+    color: #b0b0b0;
+    text-align: left;
+}
+
+.sign-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+.sign-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sign-container button:hover {
+    background-color: #0056b3;
+}
