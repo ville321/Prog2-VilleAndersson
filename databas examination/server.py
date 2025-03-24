@@ -17,8 +17,8 @@ cursor = conn.cursor()
 
 @app.route('/')
 def index():
-    if "username" not in session:
-        return redirect("/signup")
+    # if "username" not in session:
+    #     return redirect("/signup")
 
     return render_template('index.html')
 
@@ -34,6 +34,23 @@ def signup():
 
         return redirect("/")
     return render_template('signup.html')
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
+        user = cursor.fetchone()
+
+        if user:
+            session["username"] = username
+            return redirect("/")
+        else:
+            return "Fel användarnamn eller lösenord", 401
+
+    return render_template('signin.html')
 
 @socketio.on('message')
 def handle_message(msg):
