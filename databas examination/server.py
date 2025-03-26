@@ -17,8 +17,8 @@ cursor = conn.cursor()
 
 @app.route('/')
 def index():
-    # if "username" not in session:
-    #     return redirect("/signup")
+    if "username" not in session:
+        return redirect("/signup")
 
     return render_template('index.html')
 
