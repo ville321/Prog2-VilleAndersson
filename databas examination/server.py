@@ -24,16 +24,25 @@ def index():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    error_message = None
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
 
-        session["username"] = username
-        cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
-        conn.commit()
+        # Kontrollera om användarnamnet redan finns
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        existing_user = cursor.fetchone()
 
-        return redirect("/")
-    return render_template('signup.html')
+        if existing_user:
+            error_message = "Användarnamnet är redan upptaget. Vänligen välj ett annat."
+        else:
+            # Skapa ett nytt konto
+            session["username"] = username
+            cursor.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
+            conn.commit()
+            return redirect("/")
+
+    return render_template('signup.html', error_message=error_message)
 
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():

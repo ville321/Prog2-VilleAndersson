@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup Page</title>
+    <title>Registrera</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='sign-in-up.css') }}">
 </head>
 <body>
     <div class="sign-container">
-        <h2>Skapa konto</h2>
-        {% if error %}
-            <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <form action="{{ url_for('signup') }}" method="post">
-            <label for="username">Användarnamn</label>
+        <h2>Registrera</h2>
+        <form action="{{ url_for('signup') }}" method="POST">
+            <label for="username">Användarnamn:</label>
             <input type="text" id="username" name="username" required>
-            
-            <label for="password">Lösenord</label>
+            <br>
+            <label for="password">Lösenord:</label>
             <input type="password" id="password" name="password" required>
-
-            <p>Har du ett konto? <a href="{{ url_for('signin') }}">Logga in</a></p>
-            
-            <button type="submit">Skapa Konto</button>
+            <br>
+            <button type="submit">Registrera</button>
         </form>
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+        <p>Har du ett konto? <a href="{{ url_for('signin') }}">Logga in</a></p>
     </div>
 </body>
 </html>
